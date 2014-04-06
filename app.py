@@ -20,8 +20,8 @@ def aviary():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-  print request.params['url']
-  return 200
+  print(request.form['url'])
+  return "200"
 
 if __name__ == '__main__':
   port = int(os.environ.get("PORT", 5000))
