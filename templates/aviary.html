@@ -4,7 +4,7 @@
       (function(a){if(window.filepicker){return}var b=a.createElement("script");b.type="text/javascript";b.async=!0;b.src=("https:"===a.location.protocol?"https:":"http:")+"//api.filepicker.io/v1/filepicker.js";var c=a.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c);var d={};d._queue=[];var e="pick,pickMultiple,pickAndStore,read,write,writeUrl,export,convert,store,storeUrl,remove,stat,setKey,constructWidget,makeDropPane".split(",");var f=function(a,b){return function(){b.push([a,arguments])}};for(var g=0;g<e.length;g++){d[e[g]]=f(e[g],d._queue)}window.filepicker=d})(document);
 
     </script>
-
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <!-- Load Feather code -->
     <script type="text/javascript" src="http://feather.aviary.com/js/feather.js"></script>
 
@@ -36,6 +36,21 @@
 	    },
 	    onError: function(errorObj) {
 		alert(errorObj.message);
+	    },
+	    onClose: function(isDirty) {
+	        var img = document.getElementById('image2');
+	        img.src = '/temp2.jpg';
+		$.ajax({
+		    type: "GET",
+		    url: "/query/",
+		    contentType: "application/json; charset=utf-8",
+		    data: { echoValue: 'hi'},
+		    success: function(data) {
+			$('#content').html(data.value);
+			//alert(data.value);
+		    }
+		});   
+
 	    }
 	});
 	function launchEditor(id, src) {
@@ -49,11 +64,15 @@
   </head>
   <body>
     <div id='injection_site'></div>
+    <center><h1><div id='content'>Search for Movies and TV Shows by uploading Images</div></h1>
+    <!-- Add an upload/edit button, passing the HTML id of the image and the public URL of the image -->
+    <p><input type='button' value='Upload+Edit photo' onclick="return upload();" style="height:50%; width:50%"/></p>
+    </center>
+
 
     <img id='image1' src='http://placehold.it/350x150' style="visibility:hidden"/>
-
-    <!-- Add an upload/edit button, passing the HTML id of the image and the public URL of the image -->
-    <p><input type='button' value='Upload+Edit photo' onclick="return upload();" style="height:100%; width:100%"/></p>
+    <img id='image2' src='/temp2.jpg' style="visibility:hidden"/>
+    
 
   </body>
 </html>

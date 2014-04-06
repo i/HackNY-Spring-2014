@@ -9,15 +9,17 @@ db = client.hackny
 title = sys.argv[1]
 path = sys.argv[2]
 
-print 'title: ' + title
-print 'path: ' + path
 
 for img in listdir(path):
-  print img
-  h = imagehash.average_hash(Image.open(path + '/' + img))
+  ahash = imagehash.average_hash(Image.open(path + '/' + img))
+  phash = imagehash.phash(Image.open(path + '/' + img))
+  dhash = imagehash.dhash(Image.open(path + '/' + img))
   imghash = {
       "title": title,
-      "hash": str(h)
+      "ahash": str(ahash),
+      "phash": str(phash),
+      "dhash": str(dhash),
+      "filename": img
       }
 
   # print imghash
