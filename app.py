@@ -6,6 +6,7 @@ import pymongo
 from PIL import Image
 import sys
 import imagehash
+import heapq
 import subprocess
 from bs4 import BeautifulSoup
 import json
@@ -20,21 +21,22 @@ def computeHash(filename):
   return str(imagehash.average_hash(Image.open(filename)))
 
 def query(target):
-  minWeight = 1000000
-  minImage = ''
+  mins = [[1000000, None], [1000000, None], [1000000, None], [1000000, None], [1000000, None]]
+
   for obj in db.images.find():
     # compute the hamming weight of the bitwise xor
     try:
       weight = bin(int(target, 16) ^ int(obj['ahash'], 16)).count('1')
+      m = max(mins, key=lambda x:x[0])
 
-      if minWeight > weight:
-        minWeight = weight
-        minObj = obj
+      if weight > m[0]:
+        m[0] = weight
+        m[1] = obj
         print target, obj['ahash'], obj['filename']
     except:
       pass
 
-  return minObj
+  return mins
 
 
 def foursquare(query):
