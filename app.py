@@ -77,8 +77,8 @@ def filePicker():
 
 @app.route('/query/', methods=['GET'])
 def echo():
-  #ret_data = {"value": "Result: "+str(movieTitle)}
-  ret_data = {"value": foursquare('steak')}
+  ret_data = {"value": frameObjs}
+  #ret_data = {"value": foursquare('steak')}
   return jsonify(ret_data)
 
 @app.route('/aviary', methods=['GET'])
@@ -89,6 +89,8 @@ def aviary():
 @app.route('/upload', methods=['POST'])
 def upload():
   global movieTitle
+  global frameObjs
+
   url = request.form['url']
   print url
   file_name = 'temp.'+url.split('/')[-1].split('.')[-1]
@@ -112,12 +114,12 @@ def upload():
       #print status,
 
   f.close()
-  frameObj = query(computeHash(file_name))
-  movieTitle = frameObj['title']
-  frame = frameObj['filename']
-  print(frame)
-  subprocess.call(['cp','-f','./images/'+frame,'./temp2.jpg'])
-  render_template('file.html')
+  frameObjs = query(computeHash(file_name))
+  #movieTitle = [frameObj['title'] for frameObj in frameObjs]
+  # frame = frameObjs[0][1]['filename']
+  # print(frame)
+  # subprocess.call(['cp','-f','./images/'+frame,'./temp2.jpg'])
+  # render_template('file.html')
   return "200"
 
 if __name__ == '__main__':
