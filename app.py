@@ -2,8 +2,36 @@ from flask import Flask, render_template, request
 import os
 import requests
 import urllib2
+import pymongo
+from PIL import Image
+import sys
+import imagehash
+
+
+client = pymongo.MongoClient('localhost', 27017)
+db = client.hackny
 
 app = Flask(__name__)
+
+
+def computeHash(filename):
+  return imagehash.average_hash(Image.open(filename))  
+
+def query(target):
+  target = str(target)
+  minWeight = 1000000
+  minImage = ''
+  for obj in db.images.find():
+    # compute the hamming weight of the bitwise xor
+    
+    weight = bin(int(target, 16) ^ int(obj['ahash'], 16)).count('1')
+
+    if minWeight > weight:
+      minWeight = weight
+      minObj = obj
+
+  return obj
+
 
 @app.route('/', methods=['GET'])
 def index():
@@ -24,7 +52,7 @@ def aviary():
 def upload():
   url = request.form['url']
   print url
-  file_name = url.split('/')[-1]
+  file_name = 'temp.'+url.split('/')[-1].split('.')[-1]
   u = urllib2.urlopen(url)
   f = open(file_name, 'wb')
   meta = u.info()
@@ -45,6 +73,10 @@ def upload():
       print status,
 
   f.close()
+  frameObj = query(computeHash(file_name))
+  movieTitle = frameObj['title']
+  frame = frameObj['filename']
+  
 
   return "200"
 
