@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import os
 
 app = Flask(__name__)
@@ -20,7 +20,8 @@ def aviary():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-  return 'yolo'
+  print request.params['url']
+  return 200
 
 if __name__ == '__main__':
   port = int(os.environ.get("PORT", 5000))
