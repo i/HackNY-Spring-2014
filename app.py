@@ -7,10 +7,22 @@ app = Flask(__name__)
 def index():
   return render_template("index.html")
 
+
+@app.route('/file', methods=['GET'])
+def filePicker():
+  return render_template("file.html")
+
+
+@app.route('/aviary', methods=['GET'])
+def aviary():
+  return render_template("aviary.html")
+
+
 @app.route('/upload', methods=['POST'])
 def upload():
   return 'yolo'
 
 if __name__ == '__main__':
   port = int(os.environ.get("PORT", 5000))
+  app.debug = True
   app.run(host='0.0.0.0', port=port)
