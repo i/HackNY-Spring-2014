@@ -1,16 +1,34 @@
 <html>
 <head>
+    <script type="text/javascript">
+      (function(a){if(window.filepicker){return}var b=a.createElement("script");b.type="text/javascript";b.async=!0;b.src=("https:"===a.location.protocol?"https:":"http:")+"//api.filepicker.io/v1/filepicker.js";var c=a.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c);var d={};d._queue=[];var e="pick,pickMultiple,pickAndStore,read,write,writeUrl,export,convert,store,storeUrl,remove,stat,setKey,constructWidget,makeDropPane".split(",");var f=function(a,b){return function(){b.push([a,arguments])}};for(var g=0;g<e.length;g++){d[e[g]]=f(e[g],d._queue)}window.filepicker=d})(document);
+</script>
+
+
+
 <!-- Load Feather code -->
 <script type="text/javascript" src="http://feather.aviary.com/js/feather.js"></script>
 
 <!-- Instantiate Feather -->
 <script type='text/javascript'>
+  var imageUrl;
+      filepicker.setKey('ATfkz3LBRG8uTkZJ1U3ugz');
+  function upload() {
+      filepicker.pick(function(InkBlob){
+          console.log(InkBlob.url);
+          imageUrl = InkBlob.url;
+          document.getElementById('image1').src = imageUrl;
+  launchEditor('image1', imageUrl);
+      });
+
+  }
+
    var featherEditor = new Aviary.Feather({
        apiKey: '52e21fc98a702610',
        apiVersion: 3,
        theme: 'dark', // Check out our new 'light' and 'dark' themes!
        tools: 'all',
-       postUrl:'http://jh.ngrok.com/upload',
+       postUrl: window.location.origin + '/upload' ,
        appendTo: '',
        onSave: function(imageID, newURL) {
            var img = document.getElementById(imageID);
@@ -33,9 +51,13 @@
 <body>
 <div id='injection_site'></div>
 
-<img id='image1' src='http://images.aviary.com/imagesv5/feather_default.jpg'/>
+<img id='image1' src='http://placehold.it/350x150' style="visibility:hidden"/>
 
 <!-- Add an edit button, passing the HTML id of the image and the public URL of the image -->
-<p><input type='image' src='http://images.aviary.com/images/edit-photo.png' value='Edit photo' onclick="return launchEditor('image1', 'http://images.aviary.com/imagesv5/feather_default.jpg');" /></p>
+<p><input type='image' src='http://images.aviary.com/images/edit-photo.png' value='Edit photo' onclick="return upload();" /></p>
+
+<!-- Add an edit button, passing the HTML id of the image and the public URL of the image -->
+<!-- <p><input type='image' src='http://images.aviary.com/images/edit-photo.png' value='Edit photo' onclick="return launchEditor('image1', imageUrl);" /></p> -->
+
 </body>
 </html>
